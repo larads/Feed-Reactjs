@@ -13,8 +13,12 @@ export function Post(props) {
     'Post muito bacana, hein?!'
   ]);
 
-  function deleteComment(comment) {
-    console.log(`Deletar comentário ${comment}`)
+  function deleteComment(commentToDelete) {
+    const commentsWithoutDeletedOne = comments.filter(comment => {
+      return comment !== commentToDelete;
+    })
+
+    setComments(commentsWithoutDeletedOne);
   }
 
   const [newCommentText, setNewCommentText] = useState('');
