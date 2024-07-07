@@ -9,9 +9,12 @@ import { Comment } from './Comment';
 
 
 export function Post(props) {
+  const [newCommentText, setNewCommentText] = useState('');
   const [comments, setComments] = useState([
     'Post muito bacana, hein?!'
   ]);
+
+  const isNewCommentEmpty = newCommentText.length === 0;
 
   function deleteComment(commentToDelete) {
     const commentsWithoutDeletedOne = comments.filter(comment => {
@@ -21,7 +24,6 @@ export function Post(props) {
     setComments(commentsWithoutDeletedOne);
   }
 
-  const [newCommentText, setNewCommentText] = useState('');
 
   const publishedDateFormatted = format(props.publishedAt, "d 'de' LLLL 'às' HH:mm'h'", {
     locale: ptBR,
@@ -40,10 +42,14 @@ function handleCrateNewComment() {
   }
 
   function handleNewCommentChange() {
+    event.target.setCustomValidity('');
     setNewCommentText(event.target.value);
   }
 
-  console.log(props);
+  function handleNewCommentInvalid() {
+    event.target.setCustomValidity('Esse campo é obrigatório!');
+  }
+
   
   return (
     <article className={styles.post}>
@@ -81,10 +87,12 @@ function handleCrateNewComment() {
           value={newCommentText}
           onChange={handleNewCommentChange}
           placeholder="Deixe um comentário"
+          onInvalid={handleNewCommentInvalid}
+          required
         />
 
         <footer>
-          <button type="submit">Publicar</button>
+        <button type="submit" disabled={isNewCommentEmpty}>Publicar</button>
         </footer>
       </form>
 
